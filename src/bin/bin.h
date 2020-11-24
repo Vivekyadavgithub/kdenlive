@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QUrl>
 #include <QWidget>
 #include <QActionGroup>
+#include <QtWidgets>
 
 class AbstractProjectItem;
 class BinItemDelegate;
@@ -158,6 +159,9 @@ signals:
     void showClearButton(bool);
 };
 
+
+
+class clipDock;
 /**
  * @class Bin
  * @brief The bin widget takes care of both item model and view upon project opening.
@@ -176,8 +180,13 @@ public:
 
     bool isLoading;
 
+    clipDock* clipWidget(){
+
+        return m_clipDock;
+    }
     /** @brief Sets the document for the bin and initialize some stuff  */
     void setDocument(KdenliveDoc *project);
+
 
     /** @brief Create a clip item from its xml description  */
     void createClip(const QDomElement &xml);
@@ -303,6 +312,8 @@ public:
 
 private slots:
     void slotAddClip();
+
+
     /** @brief Reload clip from disk */
     void slotReloadClip();
     /** @brief Replace clip with another file */
@@ -370,6 +381,11 @@ public slots:
     /** @brief Reload clip thumbnail - when frame for thumbnail changed */
     void slotRefreshClipThumbnail(const QString &id);
     void slotDeleteClip();
+    /*QDockWidget* createClipDock(){
+        QWidget* wig = new QWidget(this);
+        QDockWidget* clipdock = new QDockWidget(tr("clips"), wig);
+        return clipdock;
+    }*/
     void slotItemDoubleClicked(const QModelIndex &ix, const QPoint &pos, uint modifiers);
     void slotSwitchClipProperties(const std::shared_ptr<ProjectClip> &clip);
     void slotSwitchClipProperties();
@@ -422,6 +438,7 @@ protected:
 
 private:
     std::shared_ptr<ProjectItemModel> m_itemModel;
+    clipDock* m_clipDock;
     QAbstractItemView *m_itemView;
     BinItemDelegate *m_binTreeViewDelegate;
     BinListItemDelegate *m_binListViewDelegate;
@@ -534,5 +551,42 @@ signals:
     /** @brief Selected all markers in clip properties dialog. */
     void selectMarkers();
 };
+#include "ui_archivewidget_ui.h"
+#include "ui_audiospectrum_ui.h"
+class clipDock : public QWidget
+{
+public:
 
+    explicit clipDock(QWidget *parent = nullptr)
+    {
+
+    }
+    ~clipDock();
+    void init()
+    {
+        //ui = new Ui::AudioSpectrum_UI;
+        //ui->setupUi(this);
+
+    }
+    void addToolBar(){
+        QLayout *layout = new QVBoxLayout(this);
+        QToolBar *bar = new QToolBar(this);
+        int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
+            QSize iconSize(size, size);
+            bar->setIconSize(iconSize);
+            bar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+            layout->addWidget(bar);
+            auto *tb1 = new QToolButton(this);
+            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+            layout->addWidget(tb1);
+            auto *tb2 = new QToolButton(this);
+            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+            layout->addWidget(tb2);
+            auto *tb3 = new QToolButton(this);
+            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out")));
+            layout->addWidget(tb3);
+    }
+    //Ui::AudioSpectrum_UI* ui;
+    //Bin *m_bin;
+};
 #endif

@@ -343,7 +343,9 @@ void MainWindow::init()
     spectrumDock->close();
 
     m_projectBinDock = addDock(i18n("Project Bin"), QStringLiteral("project_bin"), pCore->bin());
-
+    QDockWidget* m_BinClipDock = addDock(i18n("Clips"), QStringLiteral("clip"), pCore->bin()->clipWidget());
+    setClipDock(m_BinClipDock);
+    //pCore->bin()->clipWidget()->init();
     m_assetPanel = new AssetPanel(this);
     m_effectStackDock = addDock(i18n("Effect/Composition Stack"), QStringLiteral("effect_stack"), m_assetPanel);
     connect(m_assetPanel, &AssetPanel::doSplitEffect, m_projectMonitor, &Monitor::slotSwitchCompare);
@@ -4220,7 +4222,111 @@ void MainWindow::slotExportSubtitle()
     }
     getCurrentTimeline()->controller()->exportSubtitle();
 }
+#include <QToolBar>
+#include <QWidget>
+#include <QLineEdit>
+#include <QSlider>
+#include <QListWidget>
+void MainWindow::setClipDock(QDockWidget* m_ClipWidget)
+{
+   /* QLayout *m_layout = new QVBoxLayout(this);
 
+    // Create toolbar for buttons
+    QToolBar *m_toolbar = new QToolBar(this);
+    int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
+    QSize iconSize(size, size);
+    m_toolbar->setIconSize(iconSize);
+    m_toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_layout->addWidget(m_toolbar);
+
+    // Tags panel
+    TagWidget *m_tagsWidget = new TagWidget(this);
+    connect(m_tagsWidget, &TagWidget::switchTag, this, &Bin::switchTag);
+    connect(m_tagsWidget, &TagWidget::updateProjectTags, this, pCore->bin()::updateTags);
+    m_tagsWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+    m_layout->addWidget(m_tagsWidget);
+    m_tagsWidget->setVisible(false);
+
+    m_layout->setSpacing(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    // Search line
+    QLineEdit *m_searchLine = new QLineEdit(this);
+    m_searchLine->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    m_searchLine->setFont(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont));
+    // m_searchLine->setClearButtonEnabled(true);
+    m_searchLine->setPlaceholderText(i18n("Search..."));
+    m_searchLine->setFocusPolicy(Qt::ClickFocus);
+
+    QWidget *container = new QWidget(this);
+    auto *lay = new QHBoxLayout;
+    QSlider *m_slider = new QSlider(Qt::Horizontal, this);
+    m_slider->setMaximumWidth(100);
+    m_slider->setMinimumWidth(40);
+    m_slider->setRange(0, 10);
+    m_slider->setValue(KdenliveSettings::bin_zoom());
+    //connect(m_slider, &QAbstractSlider::valueChanged, this, &Bin::slotSetIconSize);
+    auto *tb1 = new QToolButton(this);
+    tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+    connect(tb1, &QToolButton::clicked, this, [&]() { m_slider->setValue(qMin(m_slider->value() + 1, m_slider->maximum())); });
+    auto *tb2 = new QToolButton(this);
+    tb2->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out")));
+    connect(tb2, &QToolButton::clicked, this, [&]() { m_slider->setValue(qMax(m_slider->value() - 1, m_slider->minimum())); });
+    lay->addWidget(tb2);
+    lay->addWidget(m_slider);
+    lay->addWidget(tb1);
+    container->setLayout(lay);
+    auto *widgetslider = new QWidgetAction(this);
+    widgetslider->setDefaultWidget(container);*/
+    //m_ClipWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+     //   QListWidget* customerList = new QListWidget(m_ClipWidget);
+       // customerList->addItems(QStringList()
+                         /*      << "John Doe, Harmony Enterprises, 12 Lakeside, Ambleton"
+                                           << "Jane Doe, Memorabilia, 23 Watersedge, Beaton"
+                                           << "Tammy Shea, Tiblanka, 38 Sea Views, Carlton"
+                                           << "Tim Sheen, Caraba Gifts, 48 Ocean Way, Deal"
+                                           << "Sol Harvey, Chicos Coffee, 53 New Springs, Eccleston"
+                                           << "Sally Hobart, Tiroli Tea, 67 Long River, Fedula");*/
+   //  m_ClipWidget->setWidget(customerList);
+           // addDockWidget(Qt::RightDockWidgetArea, m_ClipWidget);
+           // QMenu* viewMenu; viewMenu->addAction(m_ClipWidget->toggleViewAction());
+
+    /*Toolbar*/
+    QWidget* container = new QWidget(m_ClipWidget);
+    QLayout *layout = new QHBoxLayout(container);
+    QToolBar *bar = new QToolBar(container);
+    int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
+        QSize iconSize(size, size);
+        bar->setIconSize(iconSize);
+        bar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+       // layout->addWidget(bar);
+        auto *tb1 = new QToolButton(bar);
+        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+
+        bar->addWidget(tb1);
+
+        auto *tb2 = new QToolButton(bar);
+        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out")));
+        bar->addWidget(tb2);
+        auto *tb3 = new QToolButton(bar);
+        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+        bar->addWidget(tb3);
+        //QToolBar* bar2 = new QToolBar(container);
+       // QToolBar* bar3 = new QToolBar(container);
+        QToolButton* quit = new QToolButton(bar);
+        bar->addWidget(quit);
+        QToolButton *open = new QToolButton(bar);
+        bar->addWidget(open);
+
+        layout->addWidget(bar);
+        layout->alignment();
+        //bar->t
+        //layout->addWidget(bar);
+       // layout->addWidget(bar);
+        container->setLayout(layout);
+        container->show();
+       m_ClipWidget->setWidget(container);
+       m_ClipWidget->show();
+}
 #ifdef DEBUG_MAINW
 #undef DEBUG_MAINW
 #endif

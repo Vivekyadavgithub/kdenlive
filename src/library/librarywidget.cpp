@@ -45,7 +45,7 @@ LibraryTree::LibraryTree(QWidget *parent)
     : QTreeWidget(parent)
 {
     int size = QFontInfo(font()).pixelSize();
-    setIconSize(QSize(size * 4, size * 2));
+    setIconSize(QSize(size * 1, size * 2));
     setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
     setDragEnabled(true);

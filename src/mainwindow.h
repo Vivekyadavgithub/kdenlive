@@ -96,13 +96,14 @@ public:
     /** @brief Cache for luma files thumbnails. */
     static QMap<QString, QImage> m_lumacache;
     static QMap<QString, QStringList> m_lumaFiles;
-
+    void setClipDock(QDockWidget* m_ClipDock);
     /** @brief Adds an action to the action collection and stores the name. */
     void addAction(const QString &name, QAction *action, const QKeySequence &shortcut = QKeySequence(), KActionCategory *category = nullptr);
     /** @brief Adds an action to the action collection and stores the name. */
     QAction *addAction(const QString &name, const QString &text, const QObject *receiver, const char *member, const QIcon &icon = QIcon(),
                        const QKeySequence &shortcut = QKeySequence(), KActionCategory *category = nullptr);
 
+    //QDockWidget* addDockProp(QDockWidget* dockWidget, Qt::DockWidgetArea);
     /**
      * @brief Adds a new dock widget to this window.
      * @param title title of the dock widget

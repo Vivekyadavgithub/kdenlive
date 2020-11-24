@@ -828,6 +828,7 @@ Bin::Bin(std::shared_ptr<ProjectItemModel> model, QWidget *parent)
     : QWidget(parent)
     , isLoading(false)
     , m_itemModel(std::move(model))
+    , m_clipDock()
     , m_itemView(nullptr)
     , m_binTreeViewDelegate(nullptr)
     , m_binListViewDelegate(nullptr)
@@ -847,6 +848,7 @@ Bin::Bin(std::shared_ptr<ProjectItemModel> model, QWidget *parent)
     , m_gainedFocus(false)
     , m_audioDuration(0)
     , m_processedAudio(0)
+
 {
     m_layout = new QVBoxLayout(this);
 
