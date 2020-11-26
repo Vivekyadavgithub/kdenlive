@@ -42,6 +42,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QActionGroup>
 #include <QtWidgets>
 
+#include "KFileWidget"
+#include "KRecentDirs"
+
 class AbstractProjectItem;
 class BinItemDelegate;
 class BinListItemDelegate;
@@ -551,8 +554,7 @@ signals:
     /** @brief Selected all markers in clip properties dialog. */
     void selectMarkers();
 };
-#include "ui_archivewidget_ui.h"
-#include "ui_audiospectrum_ui.h"
+
 class clipDock : public QWidget
 {
 public:
@@ -562,30 +564,16 @@ public:
 
     }
     ~clipDock();
-    void init()
+    void init(QDockWidget* m_ClipWidget)
     {
-        //ui = new Ui::AudioSpectrum_UI;
-        //ui->setupUi(this);
+        QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
+        KFileWidget* fileWidget = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_ClipWidget);
+       m_ClipWidget->setWidget(fileWidget);
+
+       m_ClipWidget->show();
 
     }
-    void addToolBar(){
-        QLayout *layout = new QVBoxLayout(this);
-        QToolBar *bar = new QToolBar(this);
-        int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
-            QSize iconSize(size, size);
-            bar->setIconSize(iconSize);
-            bar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-            layout->addWidget(bar);
-            auto *tb1 = new QToolButton(this);
-            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
-            layout->addWidget(tb1);
-            auto *tb2 = new QToolButton(this);
-            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
-            layout->addWidget(tb2);
-            auto *tb3 = new QToolButton(this);
-            tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out")));
-            layout->addWidget(tb3);
-    }
+
     //Ui::AudioSpectrum_UI* ui;
     //Bin *m_bin;
 };
