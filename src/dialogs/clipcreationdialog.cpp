@@ -378,6 +378,7 @@ void ClipCreationDialog::createClipsCommand(KdenliveDoc *doc, const QString &par
     auto *layout = new QVBoxLayout;
     layout->addWidget(fileWidget.data());
     fileWidget->setCustomWidget(f);
+    //fileWidget->accept();
     fileWidget->okButton()->show();
     fileWidget->cancelButton()->show();
     QObject::connect(fileWidget->okButton(), &QPushButton::clicked, fileWidget.data(), &KFileWidget::slotOk);

@@ -177,7 +177,7 @@ class Bin : public QWidget
 public:
     explicit Bin(std::shared_ptr<ProjectItemModel> model, QWidget *parent = nullptr);
     ~Bin() override;
-
+    KdenliveDoc *m_doc;
     bool isLoading;
 
     clipDock* clipWidget(){
@@ -444,7 +444,7 @@ private:
     BinListItemDelegate *m_binListViewDelegate;
     std::unique_ptr<ProjectSortProxyModel> m_proxyModel;
     QToolBar *m_toolbar;
-    KdenliveDoc *m_doc;
+    //KdenliveDoc *m_doc;
     QLineEdit *m_searchLine;
     QToolButton *m_addButton;
     QMenu *m_extractAudioAction;

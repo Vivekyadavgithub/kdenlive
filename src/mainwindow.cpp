@@ -4227,6 +4227,7 @@ void MainWindow::slotExportSubtitle()
 #include <QLineEdit>
 #include <QSlider>
 #include <QListWidget>
+#include "KFileWidget"
 void MainWindow::setClipDock(QDockWidget* m_ClipWidget)
 {
    /* QLayout *m_layout = new QVBoxLayout(this);
@@ -4291,24 +4292,26 @@ void MainWindow::setClipDock(QDockWidget* m_ClipWidget)
            // QMenu* viewMenu; viewMenu->addAction(m_ClipWidget->toggleViewAction());
 
     /*Toolbar*/
-    QWidget* container = new QWidget(m_ClipWidget);
-    QLayout *layout = new QHBoxLayout(container);
+  /*  QWidget* container = new QWidget(m_ClipWidget);
+    QBoxLayout *fulllayout = new QVBoxLayout(container);
+    QBoxLayout *layout = new QHBoxLayout(container);
     QToolBar *bar = new QToolBar(container);
+
     int size = style()->pixelMetric(QStyle::PM_SmallIconSize);
         QSize iconSize(size, size);
         bar->setIconSize(iconSize);
         bar->setToolButtonStyle(Qt::ToolButtonIconOnly);
        // layout->addWidget(bar);
         auto *tb1 = new QToolButton(bar);
-        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+        tb1->setIcon(QIcon::fromTheme(QStringLiteral("forward")));
 
         bar->addWidget(tb1);
 
         auto *tb2 = new QToolButton(bar);
-        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-out")));
+        tb2->setIcon(QIcon::fromTheme(QStringLiteral("backspace")));
         bar->addWidget(tb2);
         auto *tb3 = new QToolButton(bar);
-        tb1->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
+        tb3->setIcon(QIcon::fromTheme(QStringLiteral("kdenlive-show-audio")));
         bar->addWidget(tb3);
         //QToolBar* bar2 = new QToolBar(container);
        // QToolBar* bar3 = new QToolBar(container);
@@ -4318,14 +4321,15 @@ void MainWindow::setClipDock(QDockWidget* m_ClipWidget)
         bar->addWidget(open);
 
         layout->addWidget(bar);
-        layout->alignment();
-        //bar->t
-        //layout->addWidget(bar);
-       // layout->addWidget(bar);
-        container->setLayout(layout);
-        container->show();
-       m_ClipWidget->setWidget(container);
+        layout->setAlignment(Qt::AlignTop);*/
+
+        QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
+        QWidget* dlg = new QWidget(m_ClipWidget);
+        KFileWidget* fileWidget = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_ClipWidget);
+       m_ClipWidget->setWidget(fileWidget);
+
        m_ClipWidget->show();
+
 }
 #ifdef DEBUG_MAINW
 #undef DEBUG_MAINW
