@@ -103,7 +103,6 @@ public:
     QAction *addAction(const QString &name, const QString &text, const QObject *receiver, const char *member, const QIcon &icon = QIcon(),
                        const QKeySequence &shortcut = QKeySequence(), KActionCategory *category = nullptr);
 
-
     /**
      * @brief Adds a new dock widget to this window.
      * @param title title of the dock widget

@@ -345,7 +345,7 @@ void MainWindow::init()
     m_projectBinDock = addDock(i18n("Project Bin"), QStringLiteral("project_bin"), pCore->bin());
     QDockWidget* m_BinClipDock = addDock(i18n("Clips"), QStringLiteral("clip"), pCore->bin()->clipWidget());
     pCore->bin()->clipWidget()->init(m_BinClipDock);
-    //pCore->bin()->clipWidget()->init();
+
     m_assetPanel = new AssetPanel(this);
     m_effectStackDock = addDock(i18n("Effect/Composition Stack"), QStringLiteral("effect_stack"), m_assetPanel);
     connect(m_assetPanel, &AssetPanel::doSplitEffect, m_projectMonitor, &Monitor::slotSwitchCompare);

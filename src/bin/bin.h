@@ -313,8 +313,6 @@ public:
 
 private slots:
     void slotAddClip();
-
-
     /** @brief Reload clip from disk */
     void slotReloadClip();
     /** @brief Replace clip with another file */
@@ -382,11 +380,6 @@ public slots:
     /** @brief Reload clip thumbnail - when frame for thumbnail changed */
     void slotRefreshClipThumbnail(const QString &id);
     void slotDeleteClip();
-    /*QDockWidget* createClipDock(){
-        QWidget* wig = new QWidget(this);
-        QDockWidget* clipdock = new QDockWidget(tr("clips"), wig);
-        return clipdock;
-    }*/
     void slotItemDoubleClicked(const QModelIndex &ix, const QPoint &pos, uint modifiers);
     void slotSwitchClipProperties(const std::shared_ptr<ProjectClip> &clip);
     void slotSwitchClipProperties();
