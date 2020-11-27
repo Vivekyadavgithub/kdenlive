@@ -180,13 +180,11 @@ class Bin : public QWidget
 public:
     explicit Bin(std::shared_ptr<ProjectItemModel> model, QWidget *parent = nullptr);
     ~Bin() override;
-    KdenliveDoc *m_doc;
+
     bool isLoading;
 
-    clipDock* clipWidget(){
 
-        return m_clipDock;
-    }
+    clipDock* clipWidget();
     /** @brief Sets the document for the bin and initialize some stuff  */
     void setDocument(KdenliveDoc *project);
 
@@ -447,7 +445,7 @@ private:
     BinListItemDelegate *m_binListViewDelegate;
     std::unique_ptr<ProjectSortProxyModel> m_proxyModel;
     QToolBar *m_toolbar;
-    //KdenliveDoc *m_doc;
+    KdenliveDoc *m_doc;
     QLineEdit *m_searchLine;
     QToolButton *m_addButton;
     QMenu *m_extractAudioAction;
@@ -559,10 +557,7 @@ class clipDock : public QWidget
 {
 public:
 
-    explicit clipDock(QWidget *parent = nullptr)
-    {
-
-    }
+    explicit clipDock(QWidget *parent = nullptr){}
     ~clipDock();
     void init(QDockWidget* m_ClipWidget)
     {
@@ -573,8 +568,5 @@ public:
        m_ClipWidget->show();
 
     }
-
-    //Ui::AudioSpectrum_UI* ui;
-    //Bin *m_bin;
 };
 #endif

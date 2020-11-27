@@ -4341,3 +4341,8 @@ QList<int> Bin::getUsedClipIds()
     }
     return timelineClipIds;
 }
+
+clipDock* Bin::clipWidget(){
+
+    return m_clipDock;
+}
