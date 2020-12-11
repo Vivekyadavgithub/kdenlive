@@ -357,7 +357,14 @@ for (const QUrl & file :  list) {
     }
 }*/
 //}
-
+#include <iostream>
+const char* ClipCreationDialog::conn(KFileWidget* kfile){
+    QString list;
+    list = kfile->selectedFile();
+    std::cout << list.toStdString() << "\n";
+    std::cout << "hiii\n";
+    return "hello\n";
+}
 void ClipCreationDialog::createClipsCommand(KdenliveDoc *doc, const QString &parentFolder, const std::shared_ptr<ProjectItemModel> &model)
 {
     qDebug() << "/////////// starting to add bin clips";
@@ -400,6 +407,7 @@ void ClipCreationDialog::createClipsCommand(KdenliveDoc *doc, const QString &par
         if (!list.isEmpty()) {
             KRecentDirs::add(QStringLiteral(":KdenliveClipFolder"), list.constFirst().adjusted(QUrl::RemoveFilename).toLocalFile());
         }
+        std::cout << list.size() << "\n";
         if (KdenliveSettings::autoimagesequence() && list.count() >= 1) {
             // Check for image sequence
             const QUrl &url = list.at(0);
@@ -447,4 +455,25 @@ void ClipCreationDialog::createClipsCommand(KdenliveDoc *doc, const QString &par
     if (!id.isEmpty()) {
         pCore->pushUndo(undo, redo, i18np("Add clip", "Add clips", list.size()));
     }
+}
+
+void ClipCreationDialog::init(QDockWidget* m_DockClipWidget ,KdenliveDoc* doc,
+                              std::shared_ptr<ProjectItemModel>model/*, std::unique_ptr<ProjectSortProxyModel> m_proxyModel*/){
+    QPushButton *b = new QPushButton(i18n("Import image sequence"));
+
+    QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
+    KFileWidget* kfile = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_DockClipWidget);
+    kfile->setCustomWidget(b);
+    //connect(fileWidget->okButton(),SIGNAL(clicked()),fileWidget, SLOT(conn()) );
+
+    m_DockClipWidget->setWidget(kfile);
+    ProjectSortProxyModel* m_proxyModel = new ProjectSortProxyModel();
+    //QSignalMapper* signalMapper = new QSignalMapper(m_DockClipWidget);
+   // QObject::connect (b, SIGNAL(triggered()), signalMapper, SLOT(map())) ;
+   // signalMapper -> setMapping (b, 1) ;
+   // QObject::connect (signalMapper, SIGNAL(mapped(1)), m_DockClipWidget, SLOT(conn(kfile)));
+
+   // QObject::connect(b, &QAction::triggered, m_DockClipWidget, [&]{ conn(kfile); });
+  //  QObject::connect(fileWidget->okButton(), SIGNAL(clicked()), m_DockClipWidget, SLOT(conn()));
+
 }

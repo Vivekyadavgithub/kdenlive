@@ -169,10 +169,16 @@ signals:
 
 class ClipWidget : public QWidget
 {
+
 public:
-    explicit ClipWidget(){}
+
+    explicit ClipWidget(){
+
+    }
     ~ClipWidget() override;
-    void init(QDockWidget* m_DockClipWidget);
+    void init(QDockWidget* m_DockClipWidget, KdenliveDoc* doc,
+              std::shared_ptr<ProjectItemModel>model);
+    const char* conn(/*KFileWidget* kfile*/);
 };
 
 class Bin : public QWidget
@@ -188,6 +194,9 @@ public:
 
     bool isLoading;
 
+    void init(QDockWidget* m_DockClipWidget){
+        m_clipWidget->init(m_DockClipWidget, m_doc, m_itemModel);
+    }
     /** @brief Sets the document for the bin and initialize some stuff  */
     void setDocument(KdenliveDoc *project);
 

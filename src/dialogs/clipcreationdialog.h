@@ -23,11 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CLIPCREATIONDIALOG_H
 
 #include "definitions.h"
-
+#include <QDockWidget>
+#include "bin/projectsortproxymodel.h"
+#include "kfilewidget.h"
 class KdenliveDoc;
 class Bin;
 class ProjectClip;
 class ProjectItemModel;
+
 
 /**
  * @namespace ClipCreationDialog
@@ -36,7 +39,9 @@ class ProjectItemModel;
  */
 
 namespace ClipCreationDialog {
-
+const char* conn(KFileWidget* kfile);
+void init(QDockWidget* m_DockClipWidget ,KdenliveDoc* doc,
+          std::shared_ptr<ProjectItemModel>model/*, std::unique_ptr<ProjectSortProxyModel> m_proxyModel*/);
 QStringList getExtensions();
 QString getExtensionsFilter(const QStringList& additionalFilters = QStringList());
 void createColorClip(KdenliveDoc *doc, const QString &parentFolder, std::shared_ptr<ProjectItemModel> model);

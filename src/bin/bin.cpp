@@ -823,21 +823,187 @@ bool LineEventEater::eventFilter(QObject *obj, QEvent *event)
     }
     return QObject::eventFilter(obj, event);
 }
+#include <iostream>
+const char* ClipWidget::conn(/*KFileWidget* kfile*/){
+    std :: cout << "rtygvbnm\n\n\n\n\n";
+    return "hello";
+}
 
-void ClipWidget::init(QDockWidget* m_DockClipWidget)
+void ClipWidget::init(QDockWidget* m_DockClipWidget ,KdenliveDoc* doc, std::shared_ptr<ProjectItemModel>model)
 {
-    QCheckBox *b = new QCheckBox(i18n("Import image sequence"));
-    b->setChecked(KdenliveSettings::autoimagesequence());
-    QFrame *f = new QFrame();
-    f->setFrameShape(QFrame::NoFrame);
-    auto *l = new QHBoxLayout;
-    l->addWidget(b);
-    l->addStretch(5);
-    f->setLayout(l);
-    QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
-    KFileWidget* fileWidget = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_DockClipWidget);
-    fileWidget->setCustomWidget(f);
-    m_DockClipWidget->setWidget(fileWidget);
+        QPushButton *b = new QPushButton(i18n("Import image sequence"));
+        //QScopedPointer<QDialog> dlg(new QDialog((QWidget *)doc->parent()));
+        QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
+        KFileWidget* kfile = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_DockClipWidget);
+        kfile->setCustomWidget(b);
+        //connect(fileWidget->okButton(),SIGNAL(clicked()),fileWidget, SLOT(conn()) );
+        //kfile->okButton()->show();
+        //fileWidget->cancelButton()->show();
+
+        //QObject::connect(b, &KFileWidget::accepted, kfile, &KFileWidget::accept);
+        //QObject::connect(fileWid, &KFileWidget::accepted, m_DockClipWidget, &QDialog::accept);
+        //QObject::connect(kfile->cancelButton(), &QPushButton::clicked, kfile, &QDialog::reject);
+        m_DockClipWidget->setWidget(kfile);
+        ProjectSortProxyModel* m_proxyModel = new ProjectSortProxyModel();
+        /*QSignalMapper* signalMapper = new QSignalMapper(this);
+        QObject::connect (b, SIGNAL(triggered()), signalMapper, SLOT(map())) ;
+        signalMapper -> setMapping (b, 1) ;
+        QObject::connect (signalMapper, SIGNAL(mapped(1)), this, SLOT(conn(kfile)));
+        /*QSignalMapper* signalMapper = new QSignalMapper(this);
+        QObject::connect (b, SIGNAL(clicked()), signalMapper, SLOT(map())) ;
+       signalMapper -> setMapping (b, 1) ;
+        connect (signalMapper, SIGNAL(mapped(1)), this, SLOT(conn(kfile)));*/
+
+
+
+        auto conne = [&]{
+            kfile->accepted();
+            QList<QUrl> list;
+            list = kfile->selectedUrls(); // kFileWidget* kfile;
+            std::cout << "hello1233\n";
+            //for(auto it : list){
+          //  if (!list.isEmpty()) {
+            //    KRecentDirs::add(QStringLiteral(":KdenliveClipFolder"), list.constFirst().adjusted(QUrl::RemoveFilename).toLocalFile());
+            //}
+                std::cout << kfile->selectedFile().toStdString() << "\n";
+            //}
+            return " ";
+        };
+        QObject::connect(b, &QPushButton::released, kfile, &KFileWidget::slotOk);
+        QObject::connect(b, &QPushButton::released, kfile, &KFileWidget::accept);
+
+        QObject::connect(b, &QPushButton::released, m_DockClipWidget, conne);
+
+
+
+
+        //QString list;
+            //list = kfile->selectedFile();
+            //std::cout << list.toStdString() << "\n";
+          //  std::cout << "hiii\n";
+            //return "hello\n";
+        //});*/
+      //  QObject::connect(fileWidget->okButton(), SIGNAL(clicked()), m_DockClipWidget, SLOT(conn()));
+
+
+   // ClipCreationDialog::init(m_DockClipWidget, doc, model/*, m_proxyModel*/);
+    //QPushButton *b = new QPushButton(i18n("Import image sequence"));
+    //b->setChecked(KdenliveSettings::autoimagesequence());
+//    QFrame *f = new QFrame();
+  //  f->setFrameShape(QFrame::NoFrame);
+    //auto *l = new QHBoxLayout;
+   // l->addWidget(b);
+   // l->addStretch(5);
+    //f->setLayout(l);
+
+    //QString clipFolder = KRecentDirs::dir(QStringLiteral(":KdenliveClipFolder"));
+    //KFileWidget* fileWidget = new KFileWidget(QUrl::fromLocalFile(clipFolder), m_DockClipWidget);
+    //fileWidget->setCustomWidget(b);
+    //fileWidget->okButton()->show();
+   // fileWidget->cancelButton()->show();
+    //connect(fileWidget->okButton(),SIGNAL(clicked()),fileWidget, SLOT(conn()) );
+
+    //m_DockClipWidget->setWidget(fileWidget);
+
+  //  QObject::connect(fileWidget->okButton(), SIGNAL(clicked()), m_DockClipWidget, SLOT(conn()));
+ /*   auto checked = [&](){
+         std:: cout << "butrx\n\n\n\n\n\n";
+          if(b->isChecked()){
+             std::cout << " hello \n\n \n \n \n \n \n";
+                           QList<QUrl> list;
+          list = fileWidget->selectedUrls();
+          if (!list.isEmpty()) {
+              KRecentDirs::add(QStringLiteral(":KdenliveClipFolder"), list.constFirst().adjusted(QUrl::RemoveFilename).toLocalFile());
+          }
+          if (KdenliveSettings::autoimagesequence() && list.count() >= 1) {
+               std:: cout << "jjtd \n \n \n \n \n";
+              // Check for image sequence
+              const QUrl &url = list.at(0);
+              QString fileName = url.fileName().section(QLatin1Char('.'), 0, -2);
+              if (!fileName.isEmpty() && fileName.at(fileName.size() - 1).isDigit()) {
+                  KFileItem item(url);
+                  if (item.mimetype().startsWith(QLatin1String("image"))) {
+                      // import as sequence if we found more than one image in the sequence
+                      QStringList patternlist;
+                      QString pattern = SlideshowClip::selectedPath(url, false, QString(), &patternlist);
+                      qCDebug(KDENLIVE_LOG) << " / // IMPORT PATTERN: " << pattern << " COUNT: " << patternlist.count();
+                      int count = patternlist.count();
+                      if (count > 1) {
+                          // get image sequence base name
+                          while (fileName.size() > 0 && fileName.at(fileName.size() - 1).isDigit()) {
+                              fileName.chop(1);
+                          }
+                          QString duration = doc->timecode().reformatSeparators(KdenliveSettings::sequence_duration());
+                          std::unordered_map<QString, QString> properties;
+                          properties[QStringLiteral("ttl")] = QString::number(doc->getFramePos(duration));
+                          properties[QStringLiteral("loop")] = QString::number(0);
+                          properties[QStringLiteral("crop")] = QString::number(0);
+                          properties[QStringLiteral("fade")] = QString::number(0);
+                          properties[QStringLiteral("luma_duration")] =
+                              QString::number(doc->getFramePos(doc->timecode().getTimecodeFromFrames(int(ceil(doc->timecode().fps())))));
+                          int frame_duration = doc->getFramePos(duration) * count;
+                          ClipCreator::createSlideshowClip(pattern, frame_duration, fileName, clipFolder, properties, model);
+                          return;
+                      }
+                  }
+              }
+          }
+      }
+  };*/
+      //     QObject::connect(b, &QPushButton::clicked, fileWidget, [&](){
+                /*QModelIndex id;
+                std::shared_ptr<AbstractProjectItem> currentItem = model->getBinItemByIndex(m_proxyModel->mapToSource(id));
+                std::cout << currentItem->clipAt(0);*/
+        //       std::cout << "hello\n\n\n\n\n\n";
+                //QList<QUrl> list;
+               //list = fileWidget->selectedUrls();
+                //if (!list.isEmpty()) {
+                 //   KRecentDirs::add(QStringLiteral(":KdenliveClipFolder"), list.constFirst().adjusted(QUrl::RemoveFilename).toLocalFile());
+                //}
+               // std::cout << list.size() << "\n";
+                //for(auto it : list){
+                  //  std::cout << it.toString().toStdString() << "\n";
+                //}
+                //if (KdenliveSettings::autoimagesequence() && list.count() >= 1) {
+                     //std:: cout << "jjtd \n \n \n \n \n";
+                    // Check for image sequence
+                    /*const QUrl &url = list.at(0);
+                    QString fileName = url.fileName().section(QLatin1Char('.'), 0, -2);
+                    if (!fileName.isEmpty() && fileName.at(fileName.size() - 1).isDigit()) {
+                        KFileItem item(url);
+                        if (item.mimetype().startsWith(QLatin1String("image"))) {
+                            // import as sequence if we found more than one image in the sequence
+                            QStringList patternlist;
+                            QString pattern = SlideshowClip::selectedPath(url, false, QString(), &patternlist);
+                            qCDebug(KDENLIVE_LOG) << " / // IMPORT PATTERN: " << pattern << " COUNT: " << patternlist.count();
+                            int count = patternlist.count();
+                            if (count > 1) {
+                                // get image sequence base name
+                                while (fileName.size() > 0 && fileName.at(fileName.size() - 1).isDigit()) {
+                                    fileName.chop(1);
+                                }
+                                QString duration = doc->timecode().reformatSeparators(KdenliveSettings::sequence_duration());
+                                std::unordered_map<QString, QString> properties;
+                                properties[QStringLiteral("ttl")] = QString::number(doc->getFramePos(duration));
+                                properties[QStringLiteral("loop")] = QString::number(0);
+                                properties[QStringLiteral("crop")] = QString::number(0);
+                                properties[QStringLiteral("fade")] = QString::number(0);
+                                properties[QStringLiteral("luma_duration")] =
+                                    QString::number(doc->getFramePos(doc->timecode().getTimecodeFromFrames(int(ceil(doc->timecode().fps())))));
+                                int frame_duration = doc->getFramePos(duration) * count;
+                                ClipCreator::createSlideshowClip(pattern, frame_duration, fileName, clipFolder, properties, model);
+                                return;
+                            }
+                        }
+                    }*/
+                //}
+        //});
+           /* QObject::connect(fileWidget->okButton(), &QPushButton::clicked, fileWidget.data(), &KFileWidget::slotOk);
+            QObject::connect(fileWidget.data(), &KFileWidget::accepted, fileWidget.data(), &KFileWidget::accept);
+            QObject::connect(fileWidget.data(), &KFileWidget::accepted, dlg.data(), &QDialog::accept);
+            QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, dlg.data(), &QDialog::reject);*/
+
+
 }
 
 Bin::Bin(std::shared_ptr<ProjectItemModel> model, QWidget *parent)
@@ -1949,6 +2115,7 @@ void Bin::selectProxyModel(const QModelIndex &id)
         if (id.column() != 0) {
             return;
         }
+
         std::shared_ptr<AbstractProjectItem> currentItem = m_itemModel->getBinItemByIndex(m_proxyModel->mapToSource(id));
         if (currentItem) {
             // Set item as current so that it displays its content in clip monitor
